@@ -33,10 +33,10 @@ public class CensusAnalyser {
                     CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
         } catch (InputMismatchException e){
             throw new CensusAnalyserException(e.getMessage(),
-                    CensusAnalyserException.ExceptionType.HEADER_MISMATCH_PROBLEM);
-        } catch (RuntimeException e){
-            throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.FILE_DELIMETER_PROBLEM);
+        }catch (RuntimeException e){
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.HEADER_MISMATCH_PROBLEM);
         }
     }
 
