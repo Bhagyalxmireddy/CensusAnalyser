@@ -97,14 +97,28 @@ public class CensusAnalyserTest {
         }
     }
     @Test
-    public void givenIndiaStateCode_WithCorrectFileDelimiterIncorrect_ShouldThrowException() {
+    public void givenIndiaStatecode_WithCorrectFileDelimiterIncorrect_ShouldThrowException() {
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             ExpectedException exceptionRule = ExpectedException.none();
             exceptionRule.expect(CensusAnalyserException.class);
-            censusAnalyser.loadIndianStateCode(INDIA_CENSUS_CSV_FILE_PATH);
+            censusAnalyser.loadIndianStateCode(INDIA_STATE_CSV_FILE_PATH);
         } catch (CensusAnalyserException e) {
-            Assert.assertEquals(CensusAnalyserException.ExceptionType.FILE_DELIMETER_PROBLEM, e.type);
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
         }
     }
-}
+
+    @Test
+    public void givenIndiaStateCode_WithCorrectFileButHeadereIncorrect_ShouldThrowException() {
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            ExpectedException exceptionRule = ExpectedException.none();
+            exceptionRule.expect(CensusAnalyserException.class);
+            censusAnalyser.loadIndianStateCode(INDIA_STATE_CSV_FILE_PATH);
+        } catch (CensusAnalyserException e) {
+            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
+        }
+    }
+
+  }
+
