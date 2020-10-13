@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="censusanalyser.CensusAnalyserTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-10-13T10:34:11" hostname="DESKTOP-25DPEJS" time="0.019">
+<testsuite name="censusanalyser.CensusAnalyserTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-10-13T13:09:54" hostname="DESKTOP-25DPEJS" time="0.02">
   <properties/>
-  <testcase name="givenIndiaStateCode_WithCorrectFileButHeadereIncorrect_ShouldThrowException" classname="censusanalyser.CensusAnalyserTest" time="0.019"/>
+  <testcase name="givenIndiaCensusData_WithWrongFile_ShouldThrowException" classname="censusanalyser.CensusAnalyserTest" time="0.02"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
