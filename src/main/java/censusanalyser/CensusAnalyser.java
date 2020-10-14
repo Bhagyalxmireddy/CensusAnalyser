@@ -17,19 +17,24 @@ public class CensusAnalyser {
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
         try( Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));)
         {
-            Iterator<IndiaCensusCSV>  censusCSVIterator = new OpenCSVBulider().
-                                                              getCSVFileIterator(reader,IndiaCensusCSV.class);
+            ICSVBulider csvBulider = CSVBuliderFactory.createCSVBulider();
+            Iterator<IndiaCensusCSV>  censusCSVIterator = csvBulider.getCSVFileIterator(reader,IndiaCensusCSV.class);
+
             return this.getCount(censusCSVIterator);
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        }catch(RuntimeException e){
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.HEADER_MISMATCH);
         }
     }
 
     public int loadIndianStateCode(String csvFilePath) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
-            Iterator<IndiaStateCodeCSV>  stateCSVFileIterator = new OpenCSVBulider().
-                                                                    getCSVFileIterator(reader,IndiaStateCodeCSV.class);
+            ICSVBulider csvBulider = CSVBuliderFactory.createCSVBulider();
+
+            Iterator<IndiaStateCodeCSV>  stateCSVFileIterator = csvBulider.getCSVFileIterator(reader,IndiaStateCodeCSV.class);
             return getCount(stateCSVFileIterator);
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
