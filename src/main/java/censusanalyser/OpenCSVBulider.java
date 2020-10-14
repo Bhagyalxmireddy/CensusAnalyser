@@ -8,17 +8,16 @@ import java.util.Iterator;
 
 public class OpenCSVBulider <E> extends ICSVBulider {
 
-    public  Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CensusAnalyserException {
+    public  Iterator<E> getCSVFileIterator(Reader reader, Class csvClass) throws CSVBuliderException {
         try {
-
             CsvToBeanBuilder<E> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
             csvToBeanBuilder.withType(csvClass);
             csvToBeanBuilder.withIgnoreLeadingWhiteSpace(true);
             CsvToBean<E> csvToBean = csvToBeanBuilder.build();
             return csvToBean.iterator();
         }catch (IllegalStateException e) {
-            throw new CensusAnalyserException(e.getMessage(),
-                    CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
+            throw new CSVBuliderException(e.getMessage(),
+                    CSVBuliderException.ExceptionType.UNABLE_TO_PARSE);
         }
     }
 }
