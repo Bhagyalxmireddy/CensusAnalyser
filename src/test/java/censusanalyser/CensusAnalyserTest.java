@@ -154,6 +154,16 @@ public class CensusAnalyserTest {
 
     }
     @Test
+    public void givenIndiaCensusData_WhenSortedOnArea_ShouldReturnSortedResult(){
+        try {
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+           String areaSortedData = censusAnalyser.getStateCensusAreaSortedData();
+            IndiaCensusCSV[] censusCSVS = new Gson().fromJson(areaSortedData,IndiaCensusCSV[].class);
+            Assert.assertEquals(342239,censusCSVS[0].areaInSqKm);
+        }catch (CensusAnalyserException e){}
+    }
+    @Test
     public void givenIndiastateCode_WhenSortedOnState_ShouldReturnSortedResult(){
         try{
             CensusAnalyser censusAnalyser = new CensusAnalyser();
