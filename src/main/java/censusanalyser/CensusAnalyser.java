@@ -111,4 +111,13 @@ public class CensusAnalyser {
         }
     }
 
+    public String getStateCensusPopulationSortedData() throws CensusAnalyserException {
+        if(censusCSVList == null || censusCSVList.size() == 0){
+            throw new CensusAnalyserException("No census Data",CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
+        }
+        Comparator<IndiaCensusCSV> csvComparator = Comparator.comparing(census -> census.state);
+        this.sort(censusCSVList, csvComparator);
+        String sortedStateCensusJson = new Gson().toJson(censusCSVList);
+        return sortedStateCensusJson;
+    }
 }
