@@ -9,7 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 
-public class CommanCSVReader {
+public class CommonCSVReader {
     private static final String INDIA_CENSUS_CSV_FILE_PATH = "C:\\Users\\USER\\Downloads\\CensusAnalyser\\src\\test\\resources\\IndiaStateCensusData.csv";
 
     public static void main(String[] args) throws IOException {
