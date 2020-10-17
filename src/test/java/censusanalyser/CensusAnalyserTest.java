@@ -193,7 +193,7 @@ public class CensusAnalyserTest {
     }
 
     @Test
-    public void givenUSCensusData_WhenSortedOnPopulationDensity_ShouldReturnResult(){
+    public void givenUSCensusData_WhenSortedOnPopulationDensity_ShouldReturnSortedResult(){
         try{
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             censusAnalyser.loadUSCensusData(US_CENSUS_CSV_FILE_PATH);
@@ -203,7 +203,7 @@ public class CensusAnalyserTest {
         }catch (CensusAnalyserException e){}
     }
     @Test
-    public void givenUSCensusData_WhenSortedOnTotalArea_ShouldReturnResult(){
+    public void givenUSCensusData_WhenSortedOnTotalArea_ShouldReturnSortedResult(){
         try{
             CensusAnalyser censusAnalyser = new CensusAnalyser();
             censusAnalyser.loadUSCensusData(US_CENSUS_CSV_FILE_PATH);
@@ -212,6 +212,19 @@ public class CensusAnalyserTest {
             Assert.assertEquals("1723338.01",codeCsv[0].Totalarea);
 
         }catch (CensusAnalyserException e){ }
+    }
+    @Test
+    public void givenIndiaAndUSCensusData_WhenSortedOnDensity_ShouldReturnSortedResult(){
+        try{
+            CensusAnalyser censusAnalyser = new CensusAnalyser();
+            censusAnalyser.loadIndiaCensusData(INDIA_CENSUS_CSV_FILE_PATH);
+            String indianCensusSortedData = censusAnalyser.getStateCensusDensitySortedData();
+            censusAnalyser.loadUSCensusData(US_CENSUS_CSV_FILE_PATH);
+            String usCensusSortedData = censusAnalyser.getStateCensusDensitySortedData();
+            IndiaCensusCSV[] indiaCensusCSV = new Gson().fromJson(indianCensusSortedData,IndiaCensusCSV[].class);
+            USCensusCsv[] usCensusCsv = new Gson().fromJson(usCensusSortedData,USCensusCsv[].class);
+            Assert.assertEquals("District of Columbia",usCensusCsv[0].state);
+        }catch (CensusAnalyserException e){}
     }
 }
 
