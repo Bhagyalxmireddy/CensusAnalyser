@@ -14,11 +14,11 @@ import java.util.stream.StreamSupport;
 
 public class CensusAnalyser {
 
-    List<IndiaCensusDAO> censusList = null;
-    Map<String,IndiaCensusDAO> censusStateMap = null;
+    List<CensusDAO> censusList = null;
+    Map<String, CensusDAO> censusStateMap = null;
 
     public CensusAnalyser(){
-        this.censusList = new ArrayList<IndiaCensusDAO>();
+        this.censusList = new ArrayList<CensusDAO>();
     }
 
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
@@ -58,6 +58,26 @@ public class CensusAnalyser {
             throw new CensusAnalyserException(e.getMessage(),e.getMessage());
         }
     }
+    public int loadUSCensusData(String csvFilePath) throws CensusAnalyserException {
+        try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
+            ICSVBulider csvBulider = CSVBuliderFactory.createCSVBulider();
+            Iterator<USCensusCsv>  csvFileIterator = csvBulider.getCSVFileIterator(reader,USCensusCsv.class);
+            Iterable<USCensusCsv> csvIterable = () -> csvFileIterator;
+            StreamSupport.stream(csvIterable.spliterator(),false)
+                   .filter(csvState -> censusStateMap.get(csvState.state) != null)
+                    .forEach(csvState -> censusStateMap.get(csvState.state).state = csvState.state );
+            return censusStateMap.size();
+        } catch (IOException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
+        } catch (RuntimeException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    CensusAnalyserException.ExceptionType.HEADER_MISMATCH);
+        } catch (CSVBuliderException e) {
+            throw new CensusAnalyserException(e.getMessage(),
+                    e.getMessage());
+        }
+    }
 
 
     private <E> int getCount(Iterator<E> iterator) {
@@ -73,18 +93,18 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("No census data", CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
         }
         censusList.addAll(censusStateMap.values());
-        Comparator<IndiaCensusDAO> csvComparator = Comparator.comparing(census -> census.state);
+        Comparator<CensusDAO> csvComparator = Comparator.comparing(census -> census.state);
         this.sort(csvComparator);
         String sortedStateCensusJson = new Gson().toJson(this.censusList);
         return sortedStateCensusJson;
 
     }
 
-    private void sort(Comparator<IndiaCensusDAO> csvComparator) {
+    private void sort(Comparator<CensusDAO> csvComparator) {
         for (int i = 0; i < this.censusList.size() - 1; i++) {
             for (int j = 0; j < this.censusList.size() - i - 1; j++) {
-                IndiaCensusDAO censusCSV1 = this.censusList.get(j);
-                IndiaCensusDAO censusCSV2 = this.censusList.get(j + 1);
+                CensusDAO censusCSV1 = this.censusList.get(j);
+                CensusDAO censusCSV2 = this.censusList.get(j + 1);
                 if (csvComparator.compare(censusCSV1, censusCSV2) > 0) {
                     this.censusList.set(j, censusCSV1);
                     this.censusList.set(j + 1, censusCSV2);
@@ -98,17 +118,17 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("No census data", CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
         }
         censusList.addAll(censusStateMap.values());
-        Comparator<IndiaCensusDAO> stateComparator = Comparator.comparing(census -> census.stateCode);
+        Comparator<CensusDAO> stateComparator = Comparator.comparing(census -> census.stateCode);
         this.sortStateCode(stateComparator );
         String sortedStateCensusJson = new Gson().toJson(censusList);
         return sortedStateCensusJson;
 
     }
-    private void sortStateCode(Comparator<IndiaCensusDAO> stateComparator) {
+    private void sortStateCode(Comparator<CensusDAO> stateComparator) {
         for (int i = 0; i < this.censusList.size() - 1; i++) {
             for (int j = 0; j < this.censusList.size() - i - 1; j++) {
-                IndiaCensusDAO censusCSV1 = this.censusList.get(j);
-                IndiaCensusDAO censusCSV2 = this.censusList.get(j + 1);
+                CensusDAO censusCSV1 = this.censusList.get(j);
+                CensusDAO censusCSV2 = this.censusList.get(j + 1);
                 if (stateComparator.compare(censusCSV1, censusCSV2) > 0) {
                     this.censusList.set(j, censusCSV1);
                     this.censusList.set(j + 1, censusCSV2);
@@ -122,7 +142,7 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("No census Data",CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
         }
         censusList.addAll(censusStateMap.values());
-        Comparator<IndiaCensusDAO> csvComparator = Comparator.comparing(census -> census.state);
+        Comparator<CensusDAO> csvComparator = Comparator.comparing(census -> census.state);
         this.sort(csvComparator);
         String sortedStateCensusJson = new Gson().toJson(this.censusList);
         return sortedStateCensusJson;
@@ -133,7 +153,7 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("No census Data",CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
         }
         censusList.addAll(censusStateMap.values());
-        Comparator<IndiaCensusDAO> csvComparator = Comparator.comparing(census -> census.state);
+        Comparator<CensusDAO> csvComparator = Comparator.comparing(census -> census.state);
         this.sort(csvComparator);
         String sortedStateCensusJson = new Gson().toJson(this.censusList);
         return sortedStateCensusJson;
@@ -145,10 +165,11 @@ public class CensusAnalyser {
             throw new CensusAnalyserException("No census Data",CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
         }
         censusList.addAll(censusStateMap.values());
-        Comparator<IndiaCensusDAO> csvComparator = Comparator.comparing(census -> census.state);
+        Comparator<CensusDAO> csvComparator = Comparator.comparing(census -> census.state);
         this.sort(csvComparator);
         String sortedStateCensusJson = new Gson().toJson(this.censusList);
         return sortedStateCensusJson;
     }
+
 
 }
