@@ -36,10 +36,16 @@ public class CensusAnalyser {
             ICSVBulider csvBulider = CSVBuliderFactory.createCSVBulider();
             Iterator<E>  csvFileIterator = csvBulider.getCSVFileIterator(reader,IndiaCensusCSV.class);
             Iterable<E> csvIterable = () -> csvFileIterator;
-            StreamSupport.stream(csvIterable.spliterator(),false)
-                    .map(IndiaCensusCSV.class::cast)
-                    .forEach(censusCSV -> censusStateMap.put(censusCSV.state,new CensusDAO(censusCSV)));
-            return censusStateMap.size();
+            if(censusCSVClass.getName().equals("censusanalyser.IndiaCensusCSV")) {
+                StreamSupport.stream(csvIterable.spliterator(), false)
+                        .map(IndiaCensusCSV.class::cast)
+                        .forEach(censusCSV -> censusStateMap.put(censusCSV.state, new CensusDAO(censusCSV)));
+            }else if(censusCSVClass.getName().equals("censusanalyser.USCensusCSV")) {
+                StreamSupport.stream(csvIterable.spliterator(), false)
+                        .map(IndiaCensusCSV.class::cast)
+                        .forEach(censusCSV -> censusStateMap.put(censusCSV.state, new CensusDAO(censusCSV)));
+            }
+                return censusStateMap.size();
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
