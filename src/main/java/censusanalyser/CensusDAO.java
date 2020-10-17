@@ -14,12 +14,12 @@ public class CensusDAO {
         population = indiaCensusCSV.population;
 
     }
-    public CensusDAO(USCensusCsv CensusCsv){
-        state = CensusCsv.state;
-        stateCode = CensusCsv.StateId;
-        population = CensusCsv.Population;
-        populationDensity = CensusCsv.PopulationDensity;
-        totalarea = CensusCsv.Totalarea;
+    public CensusDAO(USCensusCsv censusCsv){
+        state = censusCsv.state;
+        stateCode = censusCsv.StateId;
+        population = censusCsv.Population;
+        populationDensity = censusCsv.PopulationDensity;
+        totalarea = censusCsv.Totalarea;
     }
     public CensusDAO(IndiaStateCodeCSV indiaStateCodeCSV){
 

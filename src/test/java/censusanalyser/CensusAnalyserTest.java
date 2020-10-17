@@ -22,7 +22,6 @@ public class CensusAnalyserTest {
         } catch (CensusAnalyserException e) {
         }
     }
-
     @Test
     public void givenIndiaCensusData_WithWrongFile_ShouldThrowException() {
         try {

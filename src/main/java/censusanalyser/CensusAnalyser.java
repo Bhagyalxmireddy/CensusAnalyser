@@ -10,6 +10,7 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.Map;
 import java.util.stream.StreamSupport;
 
 public class CensusAnalyser {
@@ -19,16 +20,25 @@ public class CensusAnalyser {
 
     public CensusAnalyser(){
         this.censusList = new ArrayList<CensusDAO>();
+        this.censusStateMap = new HashMap<String, CensusDAO>();
+
     }
 
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
+      return this.loadCensusData(csvFilePath,IndiaCensusCSV.class);
+
+    }
+
+    private <E> int loadCensusData(String csvFilePath, Class<E> censusCSVClass) throws CensusAnalyserException {
         try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             ICSVBulider csvBulider = CSVBuliderFactory.createCSVBulider();
-            Iterator<IndiaCensusCSV>  csvFileIterator = csvBulider.getCSVFileIterator(reader,IndiaCensusCSV.class);
-            Iterable<IndiaCensusCSV> csvIterable = () -> csvFileIterator;
+            Iterator<E>  csvFileIterator = csvBulider.getCSVFileIterator(reader,IndiaCensusCSV.class);
+            Iterable<E> csvIterable = () -> csvFileIterator;
             StreamSupport.stream(csvIterable.spliterator(),false)
-                    .filter(csvState -> censusStateMap.get(csvState.state) != null)
-                    .forEach(csvState -> censusStateMap.get(csvState.state).state = csvState.state );
+                    //.filter(csvState -> censusStateMap.get(csvState.state) != null)
+                    //.forEach(csvState -> censusStateMap.get(csvState.state).state = csvState.state );
+                    .map(IndiaCensusCSV.class::cast)
+                    .forEach(censusCSV -> censusStateMap.put(censusCSV.state,new CensusDAO(censusCSV)));
             return censusStateMap.size();
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
@@ -64,8 +74,10 @@ public class CensusAnalyser {
             Iterator<USCensusCsv>  csvFileIterator = csvBulider.getCSVFileIterator(reader,USCensusCsv.class);
             Iterable<USCensusCsv> csvIterable = () -> csvFileIterator;
             StreamSupport.stream(csvIterable.spliterator(),false)
-                   .filter(csvState -> censusStateMap.get(csvState.state) != null)
-                    .forEach(csvState -> censusStateMap.get(csvState.state).state = csvState.state );
+                   //.filter(csvState -> censusStateMap.get(csvState.state) != null)
+                   // .forEach(csvState -> censusStateMap.get(csvState.state).state = csvState.state );
+                  .forEach(censusCsv -> censusStateMap.put(censusCsv.state, new CensusDAO(censusCsv)));
+                            //get(censusCsv.state, new CensusDAO(censusCsv)));
             return censusStateMap.size();
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
