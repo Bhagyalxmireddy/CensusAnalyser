@@ -67,59 +67,15 @@ public class CensusAnalyserTest {
             Assert.assertEquals(CensusAnalyserException.ExceptionType.HEADER_MISMATCH, e.type);
         }
     }
-  /*  @Test
+    @Test
     public void givenIndianStateCSV_ShouldReturnExactCount() {
         try {
             CensusAnalyser censusAnalyser = new CensusAnalyser();
-            int numOfStatecode = censusAnalyser.loadIndianStateCode(INDIA_STATE_CSV_FILE_PATH);
+            int numOfStatecode = censusAnalyser.loadCensusData(CensusAnalyser.Country.INDIA,INDIA_STATE_CSV_FILE_PATH);
             Assert.assertEquals("37", numOfStatecode);
         } catch (CensusAnalyserException e) { }
     }
-    @Test
-    public void givenIndiaStateCode_WithWrongFile_ShouldThrowException() {
-        try {
-            CensusAnalyser censusAnalyser = new CensusAnalyser();
-            ExpectedException exceptionRule = ExpectedException.none();
-            exceptionRule.expect(CensusAnalyserException.class);
-            censusAnalyser.loadIndianStateCode(WRONG_CSV_FILE_PATH);
-        } catch (CensusAnalyserException e) {
-            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
-        }
-    }
-    @Test
-    public void givenIndiaStateCode_WithCorrectFileButIncorrectType_ShouldThrowException() {
-        try {
-            CensusAnalyser censusAnalyser = new CensusAnalyser();
-            ExpectedException exceptionRule = ExpectedException.none();
-            exceptionRule.expect(CensusAnalyserException.class);
-            censusAnalyser.loadIndianStateCode(INDIA_STATE_CSV_FILE_PATH);
-        } catch (CensusAnalyserException e) {
-            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
-        }
-    }
-    @Test
-    public void givenIndiaStatecode_WithCorrectFileDelimiterIncorrect_ShouldThrowException() {
-        try {
-            CensusAnalyser censusAnalyser = new CensusAnalyser();
-            ExpectedException exceptionRule = ExpectedException.none();
-            exceptionRule.expect(CensusAnalyserException.class);
-            censusAnalyser.loadIndianStateCode(INDIA_STATE_CSV_FILE_PATH);
-        } catch (CensusAnalyserException e) {
-            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
-        }
-    }
 
-    @Test
-    public void givenIndiaStateCode_WithCorrectFileButHeadereIncorrect_ShouldThrowException() {
-        try {
-            CensusAnalyser censusAnalyser = new CensusAnalyser();
-            ExpectedException exceptionRule = ExpectedException.none();
-            exceptionRule.expect(CensusAnalyserException.class);
-            censusAnalyser.loadIndianStateCode(INDIA_STATE_CSV_FILE_PATH);
-        } catch (CensusAnalyserException e) {
-            Assert.assertEquals(CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM, e.type);
-        }
-    }*/
     @Test
     public void givenIndiaCensusData_WhenSortedOnState_ShouldReturnSortedResult(){
         try {
@@ -162,16 +118,16 @@ public class CensusAnalyserTest {
             Assert.assertEquals(342239,censusCSVS[0].areaInSqKm);
         }catch (CensusAnalyserException e){}
     }
-/*    @Test
-    public void givenIndiastateCode_WhenSortedOnState_ShouldReturnSortedResult(){
+      @Test
+      public void givenIndiastateCode_WhenSortedOnState_ShouldReturnSortedResult(){
         try{
             CensusAnalyser censusAnalyser = new CensusAnalyser();
-            censusAnalyser.loadIndianStateCode(INDIA_STATE_CSV_FILE_PATH);
+            censusAnalyser.loadCensusData(CensusAnalyser.Country.INDIA,INDIA_STATE_CSV_FILE_PATH);
             String sortedCensusData = censusAnalyser.getstateCodeWiswSortedCensusData(INDIA_STATE_CSV_FILE_PATH);
             IndiaStateCodeCSV[] codeCSVS = new Gson().fromJson(sortedCensusData,IndiaStateCodeCSV[].class);
             Assert.assertEquals("AD",codeCSVS[0].stateCode);
         }catch (CensusAnalyserException e){}
-    }*/
+    }
     @Test
     public void givenUSCensusData_ShouldReturnCorrectRecords(){
         try {
