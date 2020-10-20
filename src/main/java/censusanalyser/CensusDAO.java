@@ -25,7 +25,4 @@ public class CensusDAO {
 
         stateCode = indiaStateCodeCSV.stateCode;
     }
-  /*  public IndiaCensusCSV getIndiaCensusCSV(){
-        return new IndiaCensusCSV(state,population, (double) populationDensity,(double) totalarea);
-    }*/
 }

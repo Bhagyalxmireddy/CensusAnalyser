@@ -1,8 +1,6 @@
 package censusanalyser;
 
-import com.csvBulider.CSVBuliderException;
-import com.csvBulider.CSVBuliderFactory;
-import com.csvBulider.ICSVBulider;
+
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -20,11 +18,12 @@ public class CensusAnalyser {
     Map<String, CensusDAO> censusStateMap = null;
 
     public CensusAnalyser(){
-        this.censusList = new ArrayList<CensusDAO>();
+        this.censusList = new ArrayList<>();
+        this.censusStateMap = new HashMap<>();
     }
 
     public int loadCensusData(Country country,String... csvFilePath) throws CensusAnalyserException {
-      censusStateMap = new Censusloader().loadCensusData(country, csvFilePath);
+      censusStateMap = new CensusLoader().loadCensusData(country, csvFilePath);
       return censusStateMap.size();
     }
 
@@ -34,7 +33,6 @@ public class CensusAnalyser {
         return numOfEnteries;
 
     }
-
     public String getStateWiseSortedCensusData() throws CensusAnalyserException {
 
         if (censusStateMap == null || censusStateMap.size() == 0) {
@@ -85,7 +83,7 @@ public class CensusAnalyser {
         }
     }
 
-    public String getStateCensusPopulationSortedData() throws CensusAnalyserException {
+    public String getStateCensusPopulationSortedData(String indiaCensusCsvFilePath) throws CensusAnalyserException {
         if(censusStateMap == null || censusStateMap.size() == 0){
             throw new CensusAnalyserException("No census Data",CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
         }
